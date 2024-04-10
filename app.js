@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 
 
-app.use("/usuario", rotaUsuario)
+app.use("/usuario",rotaUsuario)
 app.use("/produto", rotaProduto)
 app.use("/entrada", rotaEntrada)
 app.use("/saida", rotaSaida)

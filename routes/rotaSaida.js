@@ -41,10 +41,10 @@ router.get(`/`, (req, res, next) => {
         );
     });
 });
-
-router.post(`/`, (req, res) => {
+router.post('/', (req, res) => {
     const { id_produto, quantidade, valor_unitario, data_saida } = req.body;
 
+    // Verificar se o id_produto existe na tabela estoque
     mysql.getConnection((error, connection) => {
         if (error) {
             return res.status(500).send({
@@ -52,24 +52,26 @@ router.post(`/`, (req, res) => {
             });
         }
 
+
+        // O produto existe no estoque, então podemos continuar com a inserção
         connection.query(
-            `INSERT INTO saida (id_produto, quantidade, valor_unitario, data_saida) VALUES (?, ?, ?, ?)`,
+            "INSERT INTO `saida`( `id_produto`, `quantidade`, `valor_unitario`, `data_saida`) VALUES (?,?,?,?)",
             [id_produto, quantidade, valor_unitario, data_saida],
             (error, result) => {
-                connection.release(); // Libere a conexão
+                connection.release(); // Liberar a conexão
 
                 if (error) {
-                    console.log(error.message)
+                    console.error(error.message);
                     return res.status(500).send({
                         error: error.message,
                         response: null
                     });
                 }
 
-                atualizarEstoque(id_produto, quantidade, valor_unitario);
+                //atualizarEstoque(id_produto, quantidade, valor_unitario);
 
                 res.status(201).send({
-                    mensagem: "Saida Registrada!",
+                    mensagem: "Saída Registrada!",
                     saida: {
                         id: result.insertId,
                         id_produto: id_produto,
@@ -80,8 +82,10 @@ router.post(`/`, (req, res) => {
                 });
             }
         );
-    });
+    }
+    );
 });
+
 
 // A rota PUT está comentada, não há necessidade de modificá-la para MySQL
 
@@ -137,7 +141,7 @@ function atualizarEstoque(id_produto, quantidade, valor_unitario) {
                 }
 
                 if (rows.length > 0) {
-                    let quantidade = rows[0].quantidade;
+                    let quantidade = rows[0].qtde;
                     quantidade = parseFloat(quantidade) - parseFloat(quantidade);
 
                     connection.query(
@@ -172,5 +176,54 @@ function atualizarEstoque(id_produto, quantidade, valor_unitario) {
         );
     });
 }
+// function atualizarEstoque(id_produto, quantidade) {
+//     mysql.getConnection((error, connection) => {
+//         if (error) {
+//             console.error("Erro ao conectar ao MySQL:", error);
+//             return false;
+//         }
+
+//         connection.query(
+//             `SELECT * FROM estoque WHERE id_produto = ?`,
+//             [id_produto],
+//             (error, rows) => {
+//                 if (error) {
+//                     console.error("Erro ao executar consulta SELECT:", error);
+//                     connection.release();
+//                     return false;
+//                 }
+
+//                 if (rows.length > 0) {
+//                     let quantidadeAtual = rows[0].quantidade;
+//                     let novaQuantidade = parseFloat(quantidadeAtual) - parseFloat(quantidade);
+
+//                     if (novaQuantidade < 0) {
+//                         console.error("Erro: Quantidade insuficiente em estoque para esta saída.");
+//                         connection.release();
+//                         return false;
+//                     }
+
+//                     connection.query(
+//                         "UPDATE estoque SET quantidade = ? WHERE id_produto = ?",
+//                         [novaQuantidade, id_produto],
+//                         (error) => {
+//                             if (error) {
+//                                 console.error("Erro ao executar consulta UPDATE:", error);
+//                                 connection.release();
+//                                 return false;
+//                             }
+
+//                             connection.release();
+//                         }
+//                     );
+//                 } else {
+//                     console.error("Erro: Produto não encontrado no estoque.");
+//                     connection.release();
+//                     return false;
+//                 }
+//             }
+//         );
+//     });
+// }
 
 module.exports = router;

@@ -60,7 +60,7 @@ router.post(`/`, (req, res) => {
                 });
             }
             
-            atualizarEstoque(id_produto, quantidade, valor_unitario);
+            //atualizarEstoque(id_produto, quantidade, valor_unitario);
 
             res.status(201).send({
                 mensagem: "Entrada Registrada!",

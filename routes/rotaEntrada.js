@@ -93,7 +93,7 @@ router.delete(`/:id`, (req, res, next) => {
 });
 
 // Função para atualizar o estoque
-function atualizarEstoque(id_produto, quantidade, valor_unitario) {
+
 
     mysql.getConnection((error, connection) => {
         if (error) {
@@ -146,5 +146,5 @@ function atualizarEstoque(id_produto, quantidade, valor_unitario) {
             }
         );
     });
-}
+
 module.exports = router;

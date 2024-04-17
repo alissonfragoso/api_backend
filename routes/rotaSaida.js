@@ -123,7 +123,7 @@ router.delete(`/:id`, (req, res, next) => {
 
 // A função atualizarEstoque permanece inalterada
 
-function atualizarEstoque(id_produto, quantidade, valor_unitario) {
+
     mysql.getConnection((error, connection) => {
         if (error) {
             console.error("Erro ao conectar ao MySQL:", error);
@@ -175,7 +175,7 @@ function atualizarEstoque(id_produto, quantidade, valor_unitario) {
             }
         );
     });
-}
+
 // function atualizarEstoque(id_produto, quantidade) {
 //     mysql.getConnection((error, connection) => {
 //         if (error) {

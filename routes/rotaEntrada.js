@@ -60,7 +60,7 @@ router.post(`/`, (req, res) => {
                 });
             }
             
-            //atualizarEstoque(id_produto, quantidade, valor_unitario);
+           
 
             res.status(201).send({
                 mensagem: "Entrada Registrada!",
@@ -95,56 +95,6 @@ router.delete(`/:id`, (req, res, next) => {
 // Função para atualizar o estoque
 
 
-    mysql.getConnection((error, connection) => {
-        if (error) {
-            console.error("Erro ao conectar ao MySQL:", error);
-            return false;
-        }
 
-        connection.query(
-            `SELECT * FROM estoque WHERE id_produto = ?`,
-            [id_produto],
-            (error, rows) => {
-                if (error) {
-                    console.error("Erro ao executar consulta SELECT:", error);
-                    connection.release();
-                    return false;
-                }
-
-                if (rows.length > 0) {
-                    let quantidade = rows[0].qtde;
-                    quantidade = parseFloat(quantidade) + parseFloat(quantidade);
-
-                    connection.query(
-                        "UPDATE estoque SET quantidade = ?, valor_unitario = ? WHERE id_produto = ?",
-                        [quantidade, valor_unitario, id_produto],
-                        (error) => {
-                            if (error) {
-                                console.error("Erro ao executar consulta UPDATE:", error);
-                                connection.release();
-                                return false;
-                            }
-
-                            connection.release();
-                        }
-                    );
-                } else {
-                    connection.query(
-                        "INSERT INTO estoque (id_produto, quantidade, valor_unitario) VALUES (?, ?, ?)",
-                        [id_produto, quantidade, valor_unitario],
-                        (error) => {
-                            if (error) {
-                                console.error("Erro ao executar consulta INSERT:", error);
-                                connection.release();
-                                return false;
-                            }
-
-                            connection.release();
-                        }
-                    );
-                }
-            }
-        );
-    });
 
 module.exports = router;

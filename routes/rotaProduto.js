@@ -180,7 +180,7 @@ router.delete("/:id", (req, res, next) => {
                 error: error.message
             });
         }
-
+  
         connection.query(
             "DELETE FROM produto WHERE id = ?",
             [id],

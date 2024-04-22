@@ -53,7 +53,7 @@ router.post('/', (req, res) => {
         }
 
 
-        // O produto existe no estoque, então podemos continuar com a inserção
+        // O produto existe no estoque, então podemos continuar com a inserçãoo
         connection.query(
             "INSERT INTO `saida`( `id_produto`, `quantidade`, `valor_unitario`, `data_saida`) VALUES (?,?,?,?)",
             [id_produto, quantidade, valor_unitario, data_saida],
